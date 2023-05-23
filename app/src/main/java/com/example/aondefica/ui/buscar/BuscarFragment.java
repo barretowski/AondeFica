@@ -1,6 +1,8 @@
 package com.example.aondefica.ui.buscar;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,11 +14,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.aondefica.MainActivity;
 import com.example.aondefica.R;
 import com.example.aondefica.api.RetrofitConfig;
 import com.example.aondefica.api.estados_cidades.Cidades;
@@ -24,6 +28,7 @@ import com.example.aondefica.api.estados_cidades.Estados;
 import com.example.aondefica.api.resultados.Resultados;
 import com.example.aondefica.api.resultados.ResultadosDAO;
 import com.example.aondefica.databinding.FragmentBuscarBinding;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -45,6 +50,10 @@ public class BuscarFragment extends Fragment {
     private Cidades itemCidade;
     private List<Estados> listEstados;
     private List<Cidades> listCidades;
+    private int qtdSalva;
+
+    private AlertDialog alerta;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -55,6 +64,7 @@ public class BuscarFragment extends Fragment {
         btBuscar = view.findViewById(R.id.btBuscar);
         btBuscar.setEnabled(false);
         loadWsEstado();
+
         spEstados.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -97,20 +107,32 @@ public class BuscarFragment extends Fragment {
             @Override
             public void onResponse(Call<List<Resultados>> call, Response<List<Resultados>> response) {
                 List<Resultados> res = response.body();
-                if(res!=null){
+                if(res!=null && res.size()>0){
                     Gson gson = new Gson();
                     List<Resultados> listResultados = new ArrayList<>();
                     listResultados.addAll(res);
 
                     ResultadosDAO dalResult = new ResultadosDAO(requireContext());
-                    dalResult.apagarTodos();//apaga o conteudo
+                    //dalResult.apagarTodos();//apaga o conteudo
                     for (Resultados r : listResultados) {
-                        Resultados resultado = new Resultados(r.id, r.cep, r.logradouro, r.bairro);
-                        dalResult.salvar(resultado);
+                        //Resultados resultado = new Resultados(r.id, r.cep, r.logradouro, r.bairro);
+                        dalResult.salvar(r);
                     }
+                    qtdSalva = listResultados.size();
+                    alertSuccess();
+                }else{
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setTitle("Erro"); //define o titulo
+                    builder.setMessage("Nenhum cep foi encontrado com essas informações"); //define a mensagem
+                    //define um botão como positivo
+                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            // código a ser executado
+                        }
+                    });
+                    alerta = builder.create(); //cria o AlertDialog
+                    alerta.show(); //Exibe
 
-                    Resultados ret = dalResult.get(1);
-                    Log.i("", ""+ret);
                 }
             }
 
@@ -119,6 +141,28 @@ public class BuscarFragment extends Fragment {
 
             }
         });
+    }
+
+    private void alertSuccess() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Sucesso"); //define o titulo
+        builder.setMessage(qtdSalva+" CEPs foram encontrados e salvos com essas informações, vá para a sessão resultados!"); //define a mensagem
+
+        //define um botão como positivo
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface arg0, int arg1) {
+                resetValues();
+            }
+        });
+        alerta = builder.create(); //cria o AlertDialog
+        alerta.show(); //Exibe
+    }
+
+    private void resetValues() {
+        itemCidade=null;
+        etReferencia.setText("");
+
+        spCidades.setAdapter(null);
     }
 
     private void loadWsCidade() {
@@ -156,11 +200,6 @@ public class BuscarFragment extends Fragment {
 
             }
         });
-    }
-
-    public void buscarEstadosCidades(){
-        Call<List<Estados>> call = new RetrofitConfig().getEstadoService().buscarEstados();
-
     }
 
     @Override

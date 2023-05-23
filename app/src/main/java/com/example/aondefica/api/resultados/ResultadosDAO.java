@@ -53,7 +53,8 @@ public class ResultadosDAO {
     }
     public Resultados get(int id)
     {   Resultados o = null;
-        Cursor cursor=con.consultar("select * from "+TABLE);
+
+        Cursor cursor=con.consultar("select * from "+TABLE+"where res_id="+id);
         if(cursor.moveToFirst())
             o=new Resultados(cursor.getInt(0),cursor.getString(1), cursor.getString(2), cursor.getString(3));
         cursor.close();;
@@ -61,10 +62,12 @@ public class ResultadosDAO {
     }
     public ArrayList<Resultados> get(String filtro)
     {   ArrayList <Resultados> objs = new ArrayList();
-        String sql="select * from "+TABLE;
+        String sql="select * from "+TABLE+ "where"+filtro;
         if (!filtro.equals(""))
             sql+=" where "+filtro;
+
         Cursor cursor=con.consultar(sql);
+
         if(cursor.moveToFirst())
             while (!cursor.isAfterLast()) {
                 objs.add(new Resultados(cursor.getInt(0),cursor.getString(1), cursor.getString(2), cursor.getString(3)));
