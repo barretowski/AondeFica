@@ -5,11 +5,11 @@
     <string name="nav_header_title">Aonde Fica</string>
     <string name="nav_header_subtitle">Paulo E Flavio</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_close">Sair</string>
 
-    <string name="menu_home">Home</string>
-    <string name="menu_gallery">Maps</string>
-    <string name="menu_slideshow">Info</string>
+    <string name="menu_buscar">Buscar</string>
+    <string name="menu_resultados">Resultados</string>
+    <string name="menu_mapa">Mapa</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -1,14 +1,14 @@
-package com.example.aondefica.ui.home;
+package com.example.aondefica.ui.buscar;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class HomeViewModel extends ViewModel {
+public class BuscarViewModel extends ViewModel {
 
     private final MutableLiveData<String> mText;
 
-    public HomeViewModel() {
+    public BuscarViewModel() {
         mText = new MutableLiveData<>();
         mText.setValue("This is home fragment");
     }
