@@ -15,11 +15,18 @@ public class Resultados {
     public int ddd;
     public int siafi;
 
-    public Resultados(int id, String cep, String logradouro, String bairro) {
+    public Resultados(int id, String cep, String logradouro, String complemento, String bairro, String localidade, String uf, String ibge, String gia, int ddd, int siafi) {
         this.id = id;
         this.cep = cep;
         this.logradouro = logradouro;
+        this.complemento = complemento;
         this.bairro = bairro;
+        this.localidade = localidade;
+        this.uf = uf;
+        this.ibge = ibge;
+        this.gia = gia;
+        this.ddd = ddd;
+        this.siafi = siafi;
     }
 
 

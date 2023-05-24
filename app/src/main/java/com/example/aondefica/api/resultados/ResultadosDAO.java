@@ -56,9 +56,25 @@ public class ResultadosDAO {
 
         Cursor cursor=con.consultar("select * from "+TABLE+"where res_id="+id);
         if(cursor.moveToFirst())
-            o=new Resultados(cursor.getInt(0),cursor.getString(1), cursor.getString(2), cursor.getString(3));
+            o=new Resultados(cursor.getInt(0),cursor.getString(1), cursor.getString(2), cursor.getString(3),
+                    cursor.getString(4), cursor.getString(5), cursor.getString(6), cursor.getString(7),
+                    cursor.getString(8), cursor.getInt(9), cursor.getInt(10));
         cursor.close();;
         return o;
+    }
+    public ArrayList<Resultados> getAll(){
+        Resultados r = null;
+        ArrayList<Resultados> listResultados = new ArrayList<>();
+        Cursor cursor = con.consultar("select * from "+TABLE);
+        while(cursor.moveToNext()){
+            r = new Resultados(cursor.getInt(0),cursor.getString(1), cursor.getString(2), cursor.getString(3),
+                    cursor.getString(4), cursor.getString(5), cursor.getString(6), cursor.getString(7),
+                    cursor.getString(8), cursor.getInt(9), cursor.getInt(10));
+
+            listResultados.add(r);
+        }
+        cursor.close();
+        return listResultados;
     }
     public ArrayList<Resultados> get(String filtro)
     {   ArrayList <Resultados> objs = new ArrayList();
@@ -70,7 +86,9 @@ public class ResultadosDAO {
 
         if(cursor.moveToFirst())
             while (!cursor.isAfterLast()) {
-                objs.add(new Resultados(cursor.getInt(0),cursor.getString(1), cursor.getString(2), cursor.getString(3)));
+                objs.add(new Resultados(cursor.getInt(0),cursor.getString(1), cursor.getString(2), cursor.getString(3),
+                        cursor.getString(4), cursor.getString(5), cursor.getString(6), cursor.getString(7),
+                        cursor.getString(8), cursor.getInt(9), cursor.getInt(10)));
                 cursor.moveToNext();}
         cursor.close();;
         return objs;
