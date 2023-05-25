@@ -44,7 +44,9 @@ public class ResultadosFragment extends Fragment {
 
 
         ResultadosAdapter adapterResultados = new ResultadosAdapter(requireContext(), arrayListResultados, (lat, lng) -> {
-            Navigation.findNavController(Objects.requireNonNull(getView())).navigate(R.id.action_nav_resultados_to_nav_mapa);
+            Bundle args = new Bundle();
+            args.putString("coordenadas", lat+","+lng);
+            Navigation.findNavController(Objects.requireNonNull(getView())).navigate(R.id.action_nav_resultados_to_nav_mapa, args);
         });
         listView.setAdapter(adapterResultados);
 

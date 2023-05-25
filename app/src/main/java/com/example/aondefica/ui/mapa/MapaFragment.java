@@ -1,6 +1,7 @@
 package com.example.aondefica.ui.mapa;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,8 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback {
     private FragmentMapaBinding binding;
     private MapView mapView;
     private GoogleMap googleMap;
+    private double lat;
+    private double lng;
     private static final String MAP_VIEW_BUNDLE_KEY = "MapViewBundleKey";
 
     @Override
@@ -34,8 +37,15 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback {
         View view = inflater.inflate(R.layout.fragment_mapa, container, false);
         mapView = view.findViewById(R.id.mapView);
         mapView.setClickable(true);
-
-        posicionar();
+        String coordenadas = getArguments().getString("coordenadas");
+        if (coordenadas != null) {
+            String[] coordenadasArray = coordenadas.split(",");
+            lat = Double.parseDouble(coordenadasArray[0]);
+            lng = Double.parseDouble(coordenadasArray[1]);
+            // Use os valores de lat e lng conforme necessário
+            Log.i("Coordenadas", "Latitude: " + lat + ", Longitude: " + lng);
+            posicionar();
+        }
 
         Bundle mapViewBundle = null;
         if(savedInstanceState!=null){
@@ -49,7 +59,7 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback {
 
     private void posicionar() {
         //PONTO CENTRAL DA CIDADE
-        LatLng latLong = new LatLng(-22.1244244, -51.3860479);
+        LatLng latLong = new LatLng(lat, lng);
 
         if (googleMap != null) {
             // MARCADOR NO MAPA
@@ -80,7 +90,7 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback {
         this.googleMap.setIndoorEnabled(true);
 
         // Define a posição inicial do mapa
-        LatLng initialPosition = new LatLng(-22.1244244, -51.3860479);
+        LatLng initialPosition = new LatLng(lat, lng);
         this.googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(initialPosition, 15f));
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(initialPosition);

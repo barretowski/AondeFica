@@ -25,6 +25,14 @@
         android:id="@+id/nav_mapa"
         android:name="com.example.aondefica.ui.mapa.MapaFragment"
         android:label="@string/menu_mapa"
-        tools:layout="@layout/fragment_mapa" />
+        tools:layout="@layout/fragment_mapa">
+        <argument
+            android:name="coordenadas"
+            app:argType="string"
+            android:defaultValue="@null" />
+        <action
+            android:id="@+id/action_nav_mapa_to_nav_resultados"
+            app:destination="@id/nav_resultados" />
+    </fragment>
 
 </navigation>
