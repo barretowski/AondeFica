@@ -12,14 +12,19 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.aondefica.R;
 import com.example.aondefica.api.resultados.Resultados;
 import com.example.aondefica.api.resultados.ResultadosDAO;
 import com.example.aondefica.databinding.FragmentResultadosBinding;
+import com.example.aondefica.listener.MapListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ResultadosFragment extends Fragment {
 
@@ -36,10 +41,11 @@ public class ResultadosFragment extends Fragment {
 
         dalResult = new ResultadosDAO(requireContext());
         arrayListResultados = dalResult.getAll();
-        //List <Resultados> listaResultados = new ArrayList<Resultados>();
-        //listaResultados.addAll(arrayListResultados);
 
-        ResultadosAdapter adapterResultados = new ResultadosAdapter(requireContext(), arrayListResultados);
+
+        ResultadosAdapter adapterResultados = new ResultadosAdapter(requireContext(), arrayListResultados, (lat, lng) -> {
+            Navigation.findNavController(Objects.requireNonNull(getView())).navigate(R.id.action_nav_resultados_to_nav_mapa);
+        });
         listView.setAdapter(adapterResultados);
 
 
@@ -49,6 +55,10 @@ public class ResultadosFragment extends Fragment {
             adapterResultados.notifyDataSetChanged();// Notifica o adaptador sobre as mudanças nos dados
         });
 
+//        NavHostFragment navHostFragment =
+//                (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.action_nav_resultados_to_nav_mapa);
+//        Navigation.findNavController(view).navigate(R.id.action_nav_resultados_to_nav_mapa);
+//        NavController navController = navHostFragment.getNavController();
         return view;
     }
 

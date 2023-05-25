@@ -13,12 +13,17 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.Navigation;
 
 import com.example.aondefica.R;
 import com.example.aondefica.api.RetrofitConfig;
 import com.example.aondefica.api.geo_localizacao.GeoLocalizacao;
 import com.example.aondefica.api.resultados.Resultados;
+import com.example.aondefica.listener.MapListener;
+import com.example.aondefica.ui.mapa.MapaFragment;
 
 import java.util.ArrayList;
 
@@ -27,7 +32,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ResultadosAdapter extends ArrayAdapter<Resultados> {
-
+    private MapListener listener;
     private LayoutInflater inflater;
     private TextView tvRua;
     private TextView tvCep;
@@ -36,11 +41,13 @@ public class ResultadosAdapter extends ArrayAdapter<Resultados> {
     private FragmentManager fragmentManager;
     private String lat;
     private String lng;
-
+    private FragmentManager fm;
+    private FragmentTransaction ft;
     private Resultados resultado;
-    public ResultadosAdapter(Context context, ArrayList<Resultados> resultadosList) {
+    public ResultadosAdapter(Context context, ArrayList<Resultados> resultadosList, MapListener listener) {
         super(context, 0, resultadosList);
         inflater = LayoutInflater.from(context);
+        this.listener = listener;
     }
 
     @NonNull
@@ -104,10 +111,6 @@ public class ResultadosAdapter extends ArrayAdapter<Resultados> {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
-                    /*MapaFragment fragmentMapa = new MapaFragment();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.container_mapa, fragmentMapa);
-                    fragmentTransaction.commit();*/
                     loadWSGeolocalizacao();
                 }
             });
@@ -120,16 +123,18 @@ public class ResultadosAdapter extends ArrayAdapter<Resultados> {
     }
 
     private void loadWSGeolocalizacao() {
-        String address = resultado.getLogradouro()+", "+resultado.getBairro()+", "+resultado.getLocalidade()+", "+resultado.getUf();
+        String address = resultado.getLogradouro() + ", " + resultado.getBairro() + ", " + resultado.getLocalidade() + ", " + resultado.getUf();
         Call<GeoLocalizacao> call = new RetrofitConfig().getLocalizacao().buscarLocalizacao(address);
 
         call.enqueue(new Callback<GeoLocalizacao>() {
             @Override
             public void onResponse(Call<GeoLocalizacao> call, Response<GeoLocalizacao> response) {
-                Log.i("", ""+response.body());
+                Log.i("", "" + response.body());
                 GeoLocalizacao buscaLoc = response.body();
                 lat = buscaLoc.results.get(0).geometry.location.lat;
                 lng = buscaLoc.results.get(0).geometry.location.lng;
+
+                listener.loadMap(lat, lng);
             }
 
             @Override
@@ -137,7 +142,6 @@ public class ResultadosAdapter extends ArrayAdapter<Resultados> {
                 Log.e("Erro", "Falha na chamada: " + t.getMessage());
             }
         });
-
     }
 
 }
