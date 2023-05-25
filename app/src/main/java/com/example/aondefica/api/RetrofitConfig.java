@@ -1,5 +1,6 @@
 package com.example.aondefica.api;
 import com.example.aondefica.api.estados_cidades.EstadoCidadeService;
+import com.example.aondefica.api.geo_localizacao.GeoLocalizacaoService;
 import com.example.aondefica.api.resultados.ResultadosService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -9,6 +10,7 @@ public class RetrofitConfig {
 
     private final Retrofit retrofitEstadoCidade;
     private final Retrofit retrofitResultados;
+    private final Retrofit retrofitLocalizacao;
 
     public RetrofitConfig() {
         Gson gson = new GsonBuilder().setLenient().create();
@@ -16,6 +18,9 @@ public class RetrofitConfig {
                 .addConverterFactory(GsonConverterFactory.create()).build();
 
         retrofitResultados = new Retrofit.Builder().baseUrl("https://viacep.com.br/ws/")
+                .addConverterFactory(GsonConverterFactory.create()).build();
+
+        retrofitLocalizacao = new Retrofit.Builder().baseUrl("https://maps.googleapis.com/maps/api/")
                 .addConverterFactory(GsonConverterFactory.create()).build();
     }
     public EstadoCidadeService getEstadoService() {
@@ -25,4 +30,8 @@ public class RetrofitConfig {
     public ResultadosService getResultados(){
         return this.retrofitResultados.create(ResultadosService.class);
     }
+    public GeoLocalizacaoService getLocalizacao() {
+        return this.retrofitLocalizacao.create(GeoLocalizacaoService.class);
+    }
+
 }

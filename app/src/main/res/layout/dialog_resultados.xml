@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/tvCep"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="CEP: " />
+
+    <TextView
+        android:id="@+id/tvLogradouro"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Logradouro: " />
+
+    <TextView
+        android:id="@+id/tvComplemento"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Complemento: " />
+
+    <TextView
+        android:id="@+id/tvBairro"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Bairro: " />
+
+    <TextView
+        android:id="@+id/tvLocalidade"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Localidade: " />
+
+    <TextView
+        android:id="@+id/tvUF"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="UF: " />
+
+    <TextView
+        android:id="@+id/tvIBGE"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="IBGE: " />
+
+    <TextView
+        android:id="@+id/tvGIA"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="GIA: " />
+
+    <TextView
+        android:id="@+id/tvDDD"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="DDD: " />
+
+    <TextView
+        android:id="@+id/tvSIAFI"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="SIAFI: " />
+
+</LinearLayout>

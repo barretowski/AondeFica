@@ -10,11 +10,11 @@
             android:title="@string/menu_buscar" />
         <item
             android:id="@+id/nav_resultados"
-            android:icon="@android:drawable/ic_menu_mylocation"
+            android:icon="@mipmap/ic_result"
             android:title="@string/menu_resultados" />
         <item
             android:id="@+id/nav_mapa"
-            android:icon="@android:drawable/ic_dialog_map"
+            android:icon="@mipmap/ic_local"
             android:title="@string/menu_mapa" />
     </group>
 </menu>

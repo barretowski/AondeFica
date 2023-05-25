@@ -7,27 +7,26 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentContainer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.aondefica.R;
 import com.example.aondefica.databinding.FragmentMapaBinding;
 
 public class MapaFragment extends Fragment {
 
     private FragmentMapaBinding binding;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        MapaViewModel slideshowViewModel =
-                new ViewModelProvider(this).get(MapaViewModel.class);
-
-        binding = FragmentMapaBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
-
-        final TextView textView = binding.textSlideshow;
-        slideshowViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
-        return root;
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_mapa, container, false);
+        ViewGroup containerMapa = view.findViewById(R.id.container_mapa);
+        // ...
+        return view;
     }
+
 
     @Override
     public void onDestroyView() {
