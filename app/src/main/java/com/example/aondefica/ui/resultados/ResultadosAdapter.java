@@ -43,6 +43,7 @@ public class ResultadosAdapter extends ArrayAdapter<Resultados> {
     private String lng;
     private FragmentManager fm;
     private FragmentTransaction ft;
+    private Resultados resAtual;
     private Resultados resultado;
     public ResultadosAdapter(Context context, ArrayList<Resultados> resultadosList, MapListener listener) {
         super(context, 0, resultadosList);
@@ -66,11 +67,15 @@ public class ResultadosAdapter extends ArrayAdapter<Resultados> {
 
 
 
+        tvRua.setText(resultado.getLogradouro());
         tvBairro.setText(resultado.getBairro());
         tvCep.setText(resultado.getCep());
 
         btInfo = itemView.findViewById(R.id.btnInfo);
+        btInfo.setTag(position);
         btInfo.setOnClickListener(e -> {
+            int pos = (int) e.getTag();
+            resAtual = getItem(pos);
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setTitle("Detalhes");
 
@@ -89,16 +94,16 @@ public class ResultadosAdapter extends ArrayAdapter<Resultados> {
             TextView tvDDD = dialogView.findViewById(R.id.tvDDD);
             TextView tvSIAFI = dialogView.findViewById(R.id.tvSIAFI);
 
-            tvCep.setText("CEP: " + resultado.getCep());
-            tvLogradouro.setText("Logradouro: " + resultado.getLogradouro());
-            tvComplemento.setText("Complemento: " + resultado.getComplemento());
-            tvBairro.setText("Bairro: " + resultado.getBairro());
-            tvLocalidade.setText("Localidade: " + resultado.getLocalidade());
-            tvUF.setText("UF: " + resultado.getUf());
-            tvIBGE.setText("IBGE: " + resultado.getIbge());
-            tvGIA.setText("GIA: " + resultado.getGia());
-            tvDDD.setText("DDD: " + resultado.getDdd());
-            tvSIAFI.setText("SIAFI: " + resultado.getSiafi());
+            tvCep.setText("CEP: " + resAtual.getCep());
+            tvLogradouro.setText("Logradouro: " + resAtual.getLogradouro());
+            tvComplemento.setText("Complemento: " + resAtual.getComplemento());
+            tvBairro.setText("Bairro: " + resAtual.getBairro());
+            tvLocalidade.setText("Localidade: " + resAtual.getLocalidade());
+            tvUF.setText("UF: " + resAtual.getUf());
+            tvIBGE.setText("IBGE: " + resAtual.getIbge());
+            tvGIA.setText("GIA: " + resAtual.getGia());
+            tvDDD.setText("DDD: " + resAtual.getDdd());
+            tvSIAFI.setText("SIAFI: " + resAtual.getSiafi());
 
 
             builder.setNegativeButton("Fechar", new DialogInterface.OnClickListener() {
@@ -111,7 +116,7 @@ public class ResultadosAdapter extends ArrayAdapter<Resultados> {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
-                    loadWSGeolocalizacao();
+                    loadWSGeolocalizacao(resAtual);
                 }
             });
 
@@ -122,18 +127,17 @@ public class ResultadosAdapter extends ArrayAdapter<Resultados> {
         return itemView;
     }
 
-    private void loadWSGeolocalizacao() {
-        String address = resultado.getLogradouro() + ", " + resultado.getBairro() + ", " + resultado.getLocalidade() + ", " + resultado.getUf();
+    private void loadWSGeolocalizacao(Resultados res) {
+        String address = res.getLogradouro() + ", " + res.getBairro() + ", " + res.getLocalidade() + ", " + res.getUf();
         Call<GeoLocalizacao> call = new RetrofitConfig().getLocalizacao().buscarLocalizacao(address);
-
         call.enqueue(new Callback<GeoLocalizacao>() {
             @Override
             public void onResponse(Call<GeoLocalizacao> call, Response<GeoLocalizacao> response) {
-                Log.i("", "" + response.body());
+
                 GeoLocalizacao buscaLoc = response.body();
                 lat = buscaLoc.results.get(0).geometry.location.lat;
                 lng = buscaLoc.results.get(0).geometry.location.lng;
-
+                Log.i("", "" + lat + "-" + lng);
                 listener.loadMap(lat, lng);
             }
 
